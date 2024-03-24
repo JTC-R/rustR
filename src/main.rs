@@ -8,8 +8,7 @@ pub mod punct;
 
 
 fn main() {
-    let input_code = "ab_c. -> 123";
-
+    let input_code = "ab-cd";
     let token = tokenize::tokenize(input_code).unwrap();
     
     println!("Input code: {:?}", input_code);
@@ -219,36 +218,59 @@ mod test {
                 id: TokenType::End,
                 value: None
             });
-
+    }
+    
+    #[test]
+    fn charAtChar_assignRight_char() {
+        let tokens = tokenize::tokenize("test@example -> fa2");
+        assert!(tokens.is_ok());
+        let tokens = tokens.unwrap();
+        
+        assert_eq!(
+            tokens[0],
+            Token {
+                id: TokenType::Start,
+                value: None
+            });
+        assert_eq!(
+            tokens[1],
+            Token {
+                id: TokenType::Char,
+                value: Some(vec!["test".to_string()])
+            });
+        assert_eq!(
+            tokens[2],
+            Token {
+                id: TokenType::SignAt,
+                value: None
+            });
+        assert_eq!(
+            tokens[3],
+            Token {
+                id: TokenType::Char,
+                value: None
+            });
+        assert_eq!(
+            tokens[4],
+            Token {
+                id: TokenType::AssignRight,
+                value: None
+            });
+        assert_eq!(
+            tokens[5],
+            Token {
+                id: TokenType::Char,
+                value: Some(vec!["fa2".to_string()])
+            });
+        assert_eq!(
+            tokens[6],
+            Token {
+                id: TokenType::End,
+                value: None
+            });
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

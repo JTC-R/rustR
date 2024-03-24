@@ -10,7 +10,9 @@ pub fn is_punct(current_chr: char) -> bool {
         current_chr == '>'  ||
         current_chr == '<'  ||
         current_chr == '%'  ||
-        current_chr == '.'  
+        current_chr == '.'  ||
+        current_chr == '_'  ||
+        current_chr == '@'
     ) {
         return true
     } else {
@@ -30,7 +32,11 @@ pub fn match_punct(current_chr: char) -> TokenType {
     } else if current_chr == '%' {
         return TokenType::SignPrcnt
     } else if current_chr == '.' {
-        return TokenType::SignPeriod
+        return TokenType::SignPeriod 
+    } else if current_chr == '_' {
+        return TokenType::SignUnderScore
+    } else if current_chr == '@' {
+        return TokenType::SignAt
     } else {
         return TokenType::SignUnk
     }
@@ -54,7 +60,6 @@ pub fn handle_punct(mut main_collection: Vec<Token>, mut current_token: Option<T
         });
     
         match current_id {
-
             TokenType::SignMinus => {
                 if current_chr == '>' {
                     current_token = Some (
@@ -140,22 +145,12 @@ pub fn handle_punct(mut main_collection: Vec<Token>, mut current_token: Option<T
                 }
             },
             TokenType::Char => {
-                // There are thoe punctuations that will need the 
-                // char to be pushed <else if> and those that 
-                // can be concat'ed to the current token <if>
-                if  current_chr == '.' ||
+                if( current_chr == '.' ||
                     current_chr == '_'
-                {
+                ){
                     current_token = concat_value(current_token, current_chr);
                     return Ok((main_collection, current_token))
-                } else if (
-                    current_chr == '@'  ||
-                    current_chr == '$'  ||
-                    current_chr == '['  ||
-                    current_chr == ']'  ||
-                    current_chr == '{'  ||
-                    current_chr == '}'  
-                ){
+                } else { 
                     (main_collection, _) = push_to_main(main_collection, current_token);
                     current_token = Some(
                         Token {
@@ -163,10 +158,6 @@ pub fn handle_punct(mut main_collection: Vec<Token>, mut current_token: Option<T
                             value: None
                         });
                     return Ok((main_collection, current_token))
-                } else {
-                    return Err(TokeError {
-                        id: TokeErrType::UnexpectedSign
-                    })
                 }
             },
             _ => {
