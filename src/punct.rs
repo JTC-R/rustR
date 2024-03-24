@@ -12,7 +12,9 @@ pub fn is_punct(current_chr: char) -> bool {
         current_chr == '%'  ||
         current_chr == '.'  ||
         current_chr == '_'  ||
-        current_chr == '@'
+        current_chr == '@'  ||
+        current_chr == '('  ||
+        current_chr == ')'
     ) {
         return true
     } else {
@@ -37,6 +39,10 @@ pub fn match_punct(current_chr: char) -> TokenType {
         return TokenType::SignUnderScore
     } else if current_chr == '@' {
         return TokenType::SignAt
+    } else if current_chr == '(' {
+        return TokenType::ParensLeft
+    } else if current_chr == ')' {
+        return TokenType::ParensRight
     } else {
         return TokenType::SignUnk
     }

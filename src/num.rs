@@ -1,7 +1,7 @@
 use std::thread::current;
-use crate::tokenize:: {Token, TokenType, start_string_single, start_dbl_string, concat_value};
+use crate::tokenize:: {Token, TokenType, start_string_single, start_dbl_string, concat_value, push_to_main};
 use crate::tokenize::{TokeError, TokeErrType};
-
+use crate::punct;
 pub fn is_num(current_chr: char) -> bool {
     if current_chr.is_numeric() {
         return true 
@@ -55,14 +55,27 @@ pub fn handle_num(mut main_collection: Vec<Token>, mut current_token: Option<Tok
                 );
                 return Ok((main_collection, current_token))
             },
-            _ => {
-                current_token = Some( 
-                    Token {
-                        id: TokenType::Num,
-                        value: Some(current_value_unwrapped)
-                    }
-                );
+            TokenType::Char => {
+                current_token = concat_value(current_token, current_chr.clone());
                 return Ok((main_collection, current_token))
+            },
+            _ => {
+                if punct::is_punct(current_chr.clone()) {
+                    (main_collection, _) = push_to_main(main_collection, current_token);
+                    current_token = Some( Token {
+                        id: punct::match_punct(current_chr.clone()),
+                        value: None
+                    });
+                    return Ok((main_collection, current_token))
+                } else {
+                    current_token = Some( 
+                        Token {
+                            id: TokenType::Num,
+                            value: Some(current_value_unwrapped)
+                        }
+                    );
+                    return Ok((main_collection, current_token))
+                }
             }
         }
     }

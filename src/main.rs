@@ -8,7 +8,7 @@ pub mod punct;
 
 
 fn main() {
-    let input_code = "test@example -> fa2";
+    let input_code = "( )";
     let token = tokenize::tokenize(input_code).unwrap();
     
     println!("Input code: {:?}", input_code);
@@ -248,7 +248,7 @@ mod test {
             tokens[3],
             Token {
                 id: TokenType::Char,
-                value: None
+                value: Some(vec!["example".to_string()])
             });
         assert_eq!(
             tokens[4],

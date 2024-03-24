@@ -42,6 +42,9 @@ pub enum TokenType {
     SignPeriod,
     SignUnderScore,
     SignAt,
+    
+    ParensRight,
+    ParensLeft,
 
     SignUnk,
 
@@ -136,6 +139,7 @@ pub fn tokenize(code: &str) -> Result<Vec<Token>, TokeError> {
         println!("Current chr: {:?}", current_chr);
 
         if space::is_space(current_chr.clone()) {
+            println!("Is space");
             let space_response = space::handle_space(main_collection.clone(), current_token.clone(), current_chr);
             match space_response {
                 Ok((mc, ct)) => {
@@ -147,6 +151,7 @@ pub fn tokenize(code: &str) -> Result<Vec<Token>, TokeError> {
                 }
             }
         } else if punct::is_punct(current_chr.clone()) {
+            println!("Is punct");
             let punct_response = punct::handle_punct(main_collection.clone(), current_token.clone(), current_chr);
             match punct_response {
                 Ok((mc, ct)) => {
@@ -158,6 +163,7 @@ pub fn tokenize(code: &str) -> Result<Vec<Token>, TokeError> {
                 }
             }
         } else if chars::is_char(current_chr.clone()) {
+            println!("Is char");
             let chr_response = chars::handle_char(main_collection.clone(), current_token.clone(), current_chr);
             match chr_response {
                 Ok((mc, ct)) => {
@@ -169,6 +175,7 @@ pub fn tokenize(code: &str) -> Result<Vec<Token>, TokeError> {
                 }
              }
         } else if num::is_num(current_chr.clone()) {
+            println!("Is num");
             let num_response = num::handle_num(main_collection.clone(), current_token.clone(), current_chr);
             match num_response {
                 Ok((mc, ct)) => {
