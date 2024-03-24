@@ -8,7 +8,7 @@ pub mod punct;
 
 
 fn main() {
-    let input_code = "ab-cd";
+    let input_code = "test@example -> fa2";
     let token = tokenize::tokenize(input_code).unwrap();
     
     println!("Input code: {:?}", input_code);

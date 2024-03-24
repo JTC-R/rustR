@@ -33,11 +33,19 @@ pub fn handle_num(mut main_collection: Vec<Token>, mut current_token: Option<Tok
             TokenType::StringSngSt => {
                 current_token = start_string_single(current_chr);
                 return Ok((main_collection, current_token))
-            }, 
+            },
+            TokenType::StringSnglQt => {
+                current_token = concat_value(current_token, current_chr);
+                return Ok((main_collection, current_token))
+            },
             TokenType::StringDblSt => {
                 current_token = start_dbl_string(current_chr);
                 return Ok((main_collection, current_token))
-            },  
+            },
+            TokenType::StringDblQt => {
+                current_token = concat_value(current_token, current_chr);
+                return Ok((main_collection, current_token))
+            }
             TokenType::Num => {
                 current_token = Some( 
                     Token {
