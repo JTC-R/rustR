@@ -1,5 +1,6 @@
-use crate::tokenize:: {Token, TokenType, start_string_single, start_dbl_string, concat_value};
+use crate::tokenize::{Token, TokenType, start_string_single, start_dbl_string, concat_value, push_to_main};
 use crate::tokenize::{TokeError, TokeErrType};
+use crate::punct;
 
 
 pub fn is_char(current_chr: char) -> bool {
@@ -95,9 +96,13 @@ pub fn handle_char(mut main_collection: Vec<Token>, mut current_token: Option<To
                 }
             },
             _ => {
-                return Err(TokeError {
-                    id: TokeErrType::UnexpectedChar
-                })
+                (main_collection, _) = push_to_main(main_collection, current_token);
+                current_token = Some(
+                    Token {
+                        id: punct::match_punct(current_chr.clone()),
+                        value: None
+                    });
+                return Ok((main_collection, current_token))
             }
         }
     }

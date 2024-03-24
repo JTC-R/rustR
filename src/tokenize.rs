@@ -41,6 +41,7 @@ pub enum TokenType {
     SignModulo,
     SignPeriod,
     SignUnderScore,
+    SignAt,
 
     SignUnk,
 
