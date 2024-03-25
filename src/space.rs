@@ -3,7 +3,10 @@ use crate::tokenize:: {Token, TokenType, start_string_single, start_dbl_string, 
 use crate::tokenize:: {TokeError, TokeErrType};
 
 pub fn is_space(current_chr: char) -> bool {
-    if current_chr.to_string() == ' '.to_owned().to_string() {
+    if (
+        current_chr.clone().to_string() == ' '.to_owned().to_string() ||
+        current_chr.clone().to_string() == "\\n".to_string()
+    ){
         return true
     } else {
         return false

@@ -95,14 +95,38 @@ pub fn handle_char(mut main_collection: Vec<Token>, mut current_token: Option<To
                     })
                 }
             },
+            TokenType::SlashBackward => {
+                if current_chr == 'n' {
+                    current_token = None;
+                    return Ok((main_collection, current_token))
+                } else {
+                    (main_collection, _) = push_to_main(main_collection, current_token);
+                    current_token = Some (
+                        Token {
+                            id: TokenType::Char,
+                            value: Some(vec![current_chr.to_string()])
+                        });
+                    return Ok((main_collection, current_token))
+                }
+            }, 
             _ => {
-                (main_collection, _) = push_to_main(main_collection, current_token);
-                current_token = Some(
-                    Token {
-                        id: punct::match_punct(current_chr.clone()),
-                        value: None
-                    });
-                return Ok((main_collection, current_token))
+                if punct::is_punct(current_chr.clone()) {
+                    (main_collection, _) = push_to_main(main_collection, current_token);
+                    current_token = Some(
+                        Token {
+                            id: punct::match_punct(current_chr.clone()),
+                            value: None
+                        });
+                    return Ok((main_collection, current_token))
+                } else {
+                    (main_collection, _) = push_to_main(main_collection, current_token);
+                    current_token = Some(
+                        Token {
+                            id: TokenType::Char,
+                            value: Some(vec![current_chr.to_string()])
+                        });
+                    return Ok((main_collection, current_token))
+                } 
             }
         }
     }
