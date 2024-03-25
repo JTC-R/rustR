@@ -40,8 +40,14 @@ pub enum TokenType {
     SignPrcnt,
     SignModulo,
     SignPeriod,
+    SignComma,
     SignUnderScore,
     SignAt,
+    SignBracketRight,
+    SignBracketLeft,
+
+    SlashForward,
+    SlashBackward,
     
     ParensRight,
     ParensLeft,
@@ -187,16 +193,16 @@ pub fn tokenize(code: &str) -> Result<Vec<Token>, TokeError> {
                 }
             }
         }
-
-        if current_indx == code_length {
-            if current_token.clone().is_some() {
-                (main_collection, _) = push_to_main(main_collection.clone(), current_token.clone());
-                (main_collection, _) = push_to_main(
-                    main_collection.clone(),
-                    Some(Token::end()));
-            }
-        }
+        //if current_indx == code_length {
+        //}
     }
 
+        if current_token.clone().is_some() {
+            (main_collection, _) = push_to_main(main_collection.clone(), current_token.clone());
+        }
+        (main_collection, _) = push_to_main(
+            main_collection.clone(),
+            Some(Token::end()));
+        
     Ok(main_collection)
 }

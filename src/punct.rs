@@ -11,10 +11,14 @@ pub fn is_punct(current_chr: char) -> bool {
         current_chr == '<'  ||
         current_chr == '%'  ||
         current_chr == '.'  ||
+        current_chr == ','  ||
         current_chr == '_'  ||
         current_chr == '@'  ||
         current_chr == '('  ||
-        current_chr == ')'
+        current_chr == ')'  ||
+        current_chr == '{'  ||
+        current_chr == '}'  ||
+        current_chr == '\\'
     ) {
         return true
     } else {
@@ -34,7 +38,9 @@ pub fn match_punct(current_chr: char) -> TokenType {
     } else if current_chr == '%' {
         return TokenType::SignPrcnt
     } else if current_chr == '.' {
-        return TokenType::SignPeriod 
+        return TokenType::SignPeriod
+    } else if current_chr == ',' {
+        return TokenType::SignComma
     } else if current_chr == '_' {
         return TokenType::SignUnderScore
     } else if current_chr == '@' {
@@ -43,6 +49,12 @@ pub fn match_punct(current_chr: char) -> TokenType {
         return TokenType::ParensLeft
     } else if current_chr == ')' {
         return TokenType::ParensRight
+    } else if current_chr == '{' {
+        return TokenType::SignBracketLeft
+    } else if current_chr == '}' {
+        return TokenType::SignBracketRight
+    } else if current_chr == '\\' {
+        return TokenType::SlashBackward
     } else {
         return TokenType::SignUnk
     }
@@ -61,9 +73,6 @@ pub fn handle_punct(mut main_collection: Vec<Token>, mut current_token: Option<T
     } else {
         
         let current_id: TokenType = current_token.clone().unwrap().id;
-        let mut current_value = current_token.clone().unwrap().value.unwrap_or_else(|| {
-            vec!["".to_string()]
-        });
     
         match current_id {
             TokenType::SignMinus => {
