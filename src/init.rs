@@ -7,18 +7,22 @@ use crate::log::{ Log, LogType, TokenizeStage, TokenizeAction };
 pub fn init() {
     let mut dir_create: bool = false;
 
-    let dir_path = "./../logs";
-    if !Path::new(dir_path).exists() {
+    let current_dir = std::env::current_dir().unwrap();
+    //panic!("Current dir: {current_dir:?}");
+    //let dir_path = "./logs";
+    let dir_path = Path::new("./logs");
+    if !dir_path.exists() {
         DirBuilder::new()
             .create(dir_path)
             .expect("Unable to create logs dir")
     }
-    
-    let current_datetime = Utc::now().timestamp();    
-    let log_file_name = format!("./../logs/{0}.log", current_datetime);
-    let mut init_log = File::create(log_file_name.clone()).unwrap();
+
+
+    let current_datetime = Utc::now().timestamp();
+    let file_name = format!("{0}.log", current_datetime);
+    let log_file_name = dir_path.join(file_name); //format!("../logs/{0}.log", current_datetime);
+    let mut init_log = File::create(log_file_name).unwrap();
     let log_file_response = init_log.write(b"Initializing\n");
-    println!("Current log: {:?}", log_file_name.clone());
 
     match log_file_response {
         Ok(r) => {

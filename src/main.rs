@@ -12,7 +12,15 @@ pub mod init;
 
 fn main() {
     init::init();
-    let input_code = "'apple123' -> apple123";
+    let input_code = "a";
+       // tryCatch(
+       //         expr = {
+       //             test_foo() -> bar
+       //             if 'test' %in% bar[5, c('col_one', 'col_two')]
+       //         }, error = function(e){
+       //             print(e)
+       //         })
+       //     ";
     let token = tokenize::tokenize(input_code).unwrap();
         
     println!("Input code: {:?}", input_code);
@@ -26,6 +34,8 @@ mod test {
     use crate::tokenize::tokenize;
     use crate::tokenize::{Token, TokenType};
     use crate::tokenize::{TokeError, TokeErrType};
+    use crate::init;
+    use crate::log::*;
 
     #[test]
     fn unit_char() {

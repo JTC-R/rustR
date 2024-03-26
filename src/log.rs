@@ -1,6 +1,7 @@
 #[allow(unused_parens)]
 use std::{fs, io, fmt};
 use std::io::Write;
+use std::path::Path;
 // What do I want for the logging? 
 //
 // - want to know location
@@ -132,37 +133,47 @@ impl Log {
     }
 
     pub fn write(&self) {
-        let text = "test";
-        let mut file_list = std::fs::read_dir("../logs").unwrap()
-            .map(|res| res.map(|e| e.path()))
-            .collect::<Result<Vec<_>, io::Error>>().unwrap();
+     //   let mut file_list = std::fs::read_dir("./logs");
+     //       .map(|res| res.map(|e| e.path()))
+     //       .collect::<Result<Vec<_>, io::Error>>().unwrap();
+        let mut file_list_ = std::fs::read_dir(Path::new("./logs"));
+//        let Some(mut file_list) = match file_list_ {
+        if file_list_.is_ok() {
 
-        file_list.sort();
-        println!("{:?}", file_list.clone());
-        let filename_log = file_list.last();
+            let mut file_list = std::fs::read_dir(Path::new("./logs")).unwrap()
+                .map(|res| res.map(|e| e.path()))
+                .collect::<Result<Vec<_>, io::Error>>()
+                .unwrap();
 
-        let date_time = chrono::Utc::now().format("%Y/%m/%d %H:%M"); 
+            let filename_log = file_list.last();
 
-        let log_type = self.ltype;
-        let log_stage = self.stage;
-        let log_event = self.event;
-    
-        let log_text = format!(
-            "{0} :: Type: {1} :: Stage: {2} :: Event: {3} ||\n",
-            date_time,
-            log_type.unwrap_or(LogType::None),
-            log_stage.unwrap_or(TokenizeStage::None),
-            log_event.unwrap_or(TokenizeAction::None),
-        );
+            let date_time = chrono::Utc::now().format("%Y/%m/%d %H:%M:%S"); 
 
-        let mut log_file = std::fs::OpenOptions::new()
-            .write(true)
-            .append(true)
-            .open(filename_log.unwrap())
-            .expect("Unable to append log file");
+            let log_type = self.ltype;
+            let log_stage = self.stage;
+            let log_event = self.event;
+        
+            let log_text = format!(
+                "{0} :: Type: {1} :: Stage: {2} :: Event: {3} ||\n",
+                date_time,
+                log_type.unwrap_or(LogType::None),
+                log_stage.unwrap_or(TokenizeStage::None),
+                log_event.unwrap_or(TokenizeAction::None),
+            );
 
-       let _ = log_file.write(log_text.as_bytes()); 
+            let mut log_file = std::fs::OpenOptions::new()
+                .write(true)
+                .append(true)
+                .open(filename_log.unwrap())
+                .expect("Unable to append log file");
 
+            let _ = log_file.write(log_text.as_bytes()); 
+
+        } else {
+            let mut p = Path::new(".");
+            let p = p.join("logs");
+            println!("{:?}", p);
+        }
     }   
 }
-
+ 
