@@ -63,22 +63,14 @@ pub fn handle_num(mut main_collection: Vec<Token>, mut current_token: Option<Tok
                 return Ok((main_collection, current_token))
             },
             _ => {
-                if punct::is_punct(current_chr.clone()) {
-                    (main_collection, _) = push_to_main(main_collection, current_token);
-                    current_token = Some( Token {
-                        id: punct::match_punct(current_chr.clone()),
-                        value: None
+                (main_collection, _) = push_to_main(main_collection, current_token);
+                current_token = Some( 
+                    Token {
+                        id: TokenType::Num,
+                        value: Some(vec![current_chr.to_string()])
                     });
-                    return Ok((main_collection, current_token))
-                } else {
-                    current_token = Some( 
-                        Token {
-                            id: TokenType::Num,
-                            value: Some(current_value_unwrapped)
-                        }
-                    );
-                    return Ok((main_collection, current_token))
-                }
+                return Ok((main_collection, current_token))
+ //               }
             }
         }
     }

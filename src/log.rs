@@ -129,23 +129,20 @@ impl Log {
            event: None,
        };
        println!("Logging: {:?}", log_location.clone());
-       return(log_location)
+       return  log_location
     }
 
     pub fn write(&self) {
-     //   let mut file_list = std::fs::read_dir("./logs");
-     //       .map(|res| res.map(|e| e.path()))
-     //       .collect::<Result<Vec<_>, io::Error>>().unwrap();
-        let mut file_list_ = std::fs::read_dir(Path::new("./logs"));
-//        let Some(mut file_list) = match file_list_ {
+        let file_list_ = std::fs::read_dir(Path::new(".").join("logs"));
+
         if file_list_.is_ok() {
 
-            let mut file_list = std::fs::read_dir(Path::new("./logs")).unwrap()
+            let mut file_list = std::fs::read_dir(Path::new(".").join("logs")).unwrap()
                 .map(|res| res.map(|e| e.path()))
                 .collect::<Result<Vec<_>, io::Error>>()
                 .unwrap();
 
-            let filename_log = file_list.last();
+            let filename_log = file_list.last().unwrap();
 
             let date_time = chrono::Utc::now().format("%Y/%m/%d %H:%M:%S"); 
 
@@ -164,14 +161,15 @@ impl Log {
             let mut log_file = std::fs::OpenOptions::new()
                 .write(true)
                 .append(true)
-                .open(filename_log.unwrap())
+                .open(filename_log)
                 .expect("Unable to append log file");
 
             let _ = log_file.write(log_text.as_bytes()); 
 
         } else {
-            let mut p = Path::new(".");
-            let p = p.join("logs");
+            // panic!("Unable to write to log file");
+            println!("hellllloooo");
+            let p = Path::new(".").join("logs");
             println!("{:?}", p);
         }
     }   

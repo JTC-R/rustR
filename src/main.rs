@@ -12,7 +12,7 @@ pub mod init;
 
 fn main() {
     init::init();
-    let input_code = "a";
+    let input_code = "test_func(123) -> abc";
        // tryCatch(
        //         expr = {
        //             test_foo() -> bar
