@@ -5,25 +5,23 @@ pub mod space;
 pub mod chars;
 pub mod num;
 pub mod punct;
+pub mod errorHandler;
+pub mod log;
+pub mod init;
 
 
 fn main() {
-    let input_code = "
-            tryCatch(
-                expr = {
-                    test_foo() -> bar
-                }, error = function(e){
-                    print(e)
-                })
-            ";
+    init::init();
+    let input_code = "'apple123' -> apple123";
     let token = tokenize::tokenize(input_code).unwrap();
-    
+        
     println!("Input code: {:?}", input_code);
     println!("{:?}", token);
 }
 
 #[cfg(test)]
 mod test {
+    #[allow(unused_parens)]
     use super::*;
     use crate::tokenize::tokenize;
     use crate::tokenize::{Token, TokenType};

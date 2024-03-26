@@ -1,3 +1,4 @@
+#[allow(unused_parens)]
 use std::thread::current;
 use crate::tokenize:: {Token, TokenType, start_string_single, start_dbl_string, concat_value, push_to_main};
 use crate::tokenize::{TokeError, TokeErrType};

@@ -1,3 +1,5 @@
+
+#[allow(unused_parens)]
 use crate::tokenize::{Token, TokenType, start_string_single, start_dbl_string, concat_value, push_to_main};
 use crate::tokenize::{TokeError, TokeErrType};
 use crate::punct;
@@ -7,7 +9,7 @@ pub fn is_char(current_chr: char) -> bool {
     if current_chr.is_alphabetic() {
         return true
     } else {
-        return false
+        return false 
     }
 }
 
@@ -40,14 +42,8 @@ pub fn handle_char(mut main_collection: Vec<Token>, mut current_token: Option<To
                 current_token = start_string_single(current_chr);
                 return Ok((main_collection, current_token))
             }, 
-            TokenType::StringSnglQt => {
-                main_collection.push(
-                    Token {
-                        id: current_type,
-                        value: current_value
-                    }
-                );
-                current_token = None;
+            TokenType::StringSnglQt => { 
+                current_token = concat_value(current_token, current_chr);
                 return Ok((main_collection, current_token))
             },
             TokenType::StringDblSt => {
@@ -55,13 +51,7 @@ pub fn handle_char(mut main_collection: Vec<Token>, mut current_token: Option<To
                 return Ok((main_collection, current_token))
             },
             TokenType::StringDblQt => {
-                main_collection.push(
-                    Token {
-                        id: current_type,
-                        value: current_value
-                    }
-                );
-                current_token = None;
+                current_token = concat_value(current_token, current_chr);
                 return Ok((main_collection, current_token))
             },
             TokenType::Char => {

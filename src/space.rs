@@ -1,3 +1,4 @@
+#[allow(unused_parens)]
 use std::thread::current;
 use crate::tokenize:: {Token, TokenType, start_string_single, start_dbl_string, push_to_main, concat_value};
 use crate::tokenize:: {TokeError, TokeErrType};
@@ -47,8 +48,6 @@ pub fn handle_space(mut main_collection: Vec<Token>, mut current_token: Option<T
                 current_token = concat_value(current_token, current_chr);
                 return Ok((main_collection, current_token))
             },
-                       // Here is the problem; need to push char / num if not is_none() then set 
-            // current to None
             _ => {
                 (main_collection, current_token) = push_to_main(main_collection, current_token);
                 return Ok((main_collection, current_token))

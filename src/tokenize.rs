@@ -1,3 +1,4 @@
+#[allow(unused_parens)]
 use std::thread::current;
 
 //pub mod tokenize {
@@ -83,7 +84,7 @@ impl Token {
             Token {
                 id: TokenType::End,
                 value: None
-            }
+        }
     }
 
 }

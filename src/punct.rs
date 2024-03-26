@@ -18,7 +18,9 @@ pub fn is_punct(current_chr: char) -> bool {
         current_chr == ')'  ||
         current_chr == '{'  ||
         current_chr == '}'  ||
-        current_chr == '\\'
+        current_chr == '\\' ||
+        current_chr == '\'' ||
+        current_chr == '"'  
     ) {
         return true
     } else {
@@ -55,6 +57,10 @@ pub fn match_punct(current_chr: char) -> TokenType {
         return TokenType::SignBracketRight
     } else if current_chr == '\\' {
         return TokenType::SlashBackward
+    } else if current_chr == '\'' {
+        return TokenType::StringSngSt
+    } else if current_chr == '"' {
+        return TokenType::StringDblSt
     } else {
         return TokenType::SignUnk
     }
