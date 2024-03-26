@@ -3,6 +3,7 @@ use std::thread::current;
 use crate::tokenize:: {Token, TokenType, start_string_single, start_dbl_string, concat_value, push_to_main};
 use crate::tokenize::{TokeError, TokeErrType};
 use crate::punct;
+use crate::log::{LogType, TokenizeStage, TokenizeAction, Log};
 pub fn is_num(current_chr: char) -> bool {
     if current_chr.is_numeric() {
         return true 
@@ -12,6 +13,7 @@ pub fn is_num(current_chr: char) -> bool {
 }
 
 pub fn handle_num(mut main_collection: Vec<Token>, mut current_token: Option<Token>, current_chr: char) -> Result<(Vec<Token>, Option<Token>), TokeError>{
+    Log::location(TokenizeStage::Num).write();
     if current_token.clone().is_none() {
         current_token = Some( 
             Token { 

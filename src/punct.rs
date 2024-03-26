@@ -2,6 +2,9 @@
 use std::thread::current;
 use crate::tokenize::{Token, TokenType, start_string_single, start_dbl_string, concat_value, push_to_main};
 use crate::tokenize::{TokeError, TokeErrType};
+use crate::log::{ Log, LogType, TokenizeStage, TokenizeAction };
+
+
 
 pub fn is_punct(current_chr: char) -> bool {
     if (
@@ -29,6 +32,12 @@ pub fn is_punct(current_chr: char) -> bool {
 }
 
 pub fn match_punct(current_chr: char) -> TokenType {
+    Log::record(
+        Some(LogType::Routine),
+        Some(TokenizeStage::Punct),
+        Some(TokenizeAction::PunctTranslate)
+        )
+        .write();
     if current_chr == '=' {
         return TokenType::SignEq
     } else if current_chr == '-' {
@@ -68,6 +77,7 @@ pub fn match_punct(current_chr: char) -> TokenType {
 // The current character is a punctuation
 pub fn handle_punct(mut main_collection: Vec<Token>, mut current_token: Option<Token>, current_chr: char) -> Result<(Vec<Token>, Option<Token>), TokeError> {
 
+    Log::location(TokenizeStage::Punct).write();
     if current_token.clone().is_none() {
         current_token = Some( 
             Token {

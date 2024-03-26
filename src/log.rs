@@ -107,7 +107,7 @@ impl fmt::Display for TokenizeAction {
 pub struct Log {
     pub ltype: Option<LogType>,
     pub stage: Option<TokenizeStage>,
-    pub event: Option<TokenizeAction>,
+    pub event: Option<TokenizeAction>
 }
 
 impl Log {
@@ -115,7 +115,7 @@ impl Log {
         let log_location = Log {
             ltype: log_type,
             stage: stage,
-            event: event 
+            event: event,
         };
         
         return log_location
@@ -125,7 +125,7 @@ impl Log {
        let log_location = Log {
            ltype: Some(LogType::Routine),
            stage: Some(location),
-           event: None
+           event: None,
        };
        println!("Logging: {:?}", log_location.clone());
        return(log_location)
@@ -148,11 +148,11 @@ impl Log {
         let log_event = self.event;
     
         let log_text = format!(
-            "{0} :: Type: {1} :: Stage: {2} :: Event: {3}\n",
+            "{0} :: Type: {1} :: Stage: {2} :: Event: {3} ||\n",
             date_time,
             log_type.unwrap_or(LogType::None),
             log_stage.unwrap_or(TokenizeStage::None),
-            log_event.unwrap_or(TokenizeAction::None)
+            log_event.unwrap_or(TokenizeAction::None),
         );
 
         let mut log_file = std::fs::OpenOptions::new()

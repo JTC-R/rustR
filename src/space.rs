@@ -2,6 +2,7 @@
 use std::thread::current;
 use crate::tokenize:: {Token, TokenType, start_string_single, start_dbl_string, push_to_main, concat_value};
 use crate::tokenize:: {TokeError, TokeErrType};
+use crate::log::{ Log, LogType, TokenizeStage, TokenizeAction };
 
 pub fn is_space(current_chr: char) -> bool {
     if (
@@ -15,6 +16,7 @@ pub fn is_space(current_chr: char) -> bool {
 }
 
 pub fn handle_space(mut main_collection: Vec<Token>, mut current_token: Option<Token>, current_chr: char) -> Result<(Vec<Token>, Option<Token>), TokeError> {
+    Log::location(TokenizeStage::Space).write();
     if current_token.clone().is_none() {
        return Ok((main_collection, current_token))
     } else {

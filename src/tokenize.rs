@@ -6,6 +6,9 @@ use crate::space;
 use crate::chars;
 use crate::num;
 use crate::punct;
+use crate::log::{ Log, LogType, TokenizeStage, TokenizeAction };
+
+
 
 #[derive(Debug)]
 pub enum TokeErrType {
@@ -134,6 +137,7 @@ pub fn concat_value(current_token: Option<Token>, current_chr: char) -> Option<T
 //// TOKENIZE
 
 pub fn tokenize(code: &str) -> Result<Vec<Token>, TokeError> {
+    Log::location(TokenizeStage::Start).write();
     let mut main_collection = vec![Token::start()];
     let mut current_token: Option<Token> = None;
     let code_buffer = code;
