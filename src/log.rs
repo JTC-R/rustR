@@ -20,6 +20,7 @@ impl fmt::Display for LogType {
             LogType::Important  => write!(formatter, "Important"),
             LogType::Notify     => write!(formatter,"Notify"),
             LogType::Routine    => write!(formatter,"Routine"),
+            LogType::None       => write!(formatter, "None"),
             _ => write!(formatter,"Unknown Log Type")
         }
     }
@@ -47,6 +48,7 @@ impl fmt::Display for TokenizeStage {
             TokenizeStage::Char     => write!(formatter,"Char"),
             TokenizeStage::Num      => write!(formatter,"Num"),
             TokenizeStage::End      => write!(formatter,"None"),
+            TokenizeStage::None     => write!(formatter, "None"),
             _ => write!(formatter,"Unknown TokenizeStage")
         }
     }
@@ -55,6 +57,7 @@ impl fmt::Display for TokenizeStage {
 #[derive(Debug, Clone, Copy)]
 pub enum TokenizeAction {
     Init,
+    InitLogDirCreation,
 
     MainPush,
 
@@ -91,6 +94,8 @@ impl fmt::Display for TokenizeAction {
             TokenizeAction::PunctUnexpected     => write!(formatter,"Unexpected Punctuation encounter"),
             TokenizeAction::CharUnexpected      => write!(formatter,"Unexpected Character encounter"),
             TokenizeAction::NumUnexpected       => write!(formatter,"Unexpected num encounter"),
+            TokenizeAction::InitLogDirCreation  => write!(formatter, "Log Directory creation"),
+            TokenizeAction::None                => write!(formatter, "None"),
             _ => write!(formatter,"Unknown TokenizeAction")
 
         }
@@ -106,8 +111,14 @@ pub struct Log {
 }
 
 impl Log {
-    pub fn record(log_type: Option<LogType>, stage: Option<TokenizeStage>, event: Option<TokenizeAction>) {
+    pub fn record(log_type: Option<LogType>, stage: Option<TokenizeStage>, event: Option<TokenizeAction>) -> Self {
+        let log_location = Log {
+            ltype: log_type,
+            stage: stage,
+            event: event 
+        };
         
+        return log_location
     }
 
     pub fn location(location: TokenizeStage) -> Self {
@@ -137,7 +148,7 @@ impl Log {
         let log_event = self.event;
     
         let log_text = format!(
-            "{0} :: {1} :: {2} :: {3}\n",
+            "{0} :: Type: {1} :: Stage: {2} :: Event: {3}\n",
             date_time,
             log_type.unwrap_or(LogType::None),
             log_stage.unwrap_or(TokenizeStage::None),
