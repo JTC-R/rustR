@@ -1,6 +1,7 @@
 
+#[allow(non_snake_case)]
 #[allow(unused_parens)]
-use crate::tokenize::{Token, TokenType, start_string_single, start_dbl_string, concat_value, push_to_main};
+use crate::tokenize::{Token, TokenType, start_string_sngl, start_string_dbl, concat_value, push_to_main};
 use crate::tokenize::{TokeError, TokeErrType};
 use crate::punct;
 use crate::log::{ Log, LogType, TokenizeStage, TokenizeAction };
@@ -39,8 +40,8 @@ pub fn handle_char(mut main_collection: Vec<Token>, mut current_token: Option<To
         }
 
         match current_type {
-            TokenType::StringSngSt => {
-                current_token = start_string_single(current_chr);
+            TokenType::StringSnglSt => {
+                current_token = start_string_sngl(current_chr);
                 return Ok((main_collection, current_token))
             }, 
             TokenType::StringSnglQt => { 
@@ -48,7 +49,7 @@ pub fn handle_char(mut main_collection: Vec<Token>, mut current_token: Option<To
                 return Ok((main_collection, current_token))
             },
             TokenType::StringDblSt => {
-                current_token = start_dbl_string(current_chr);
+                current_token = start_string_dbl(current_chr);
                 return Ok((main_collection, current_token))
             },
             TokenType::StringDblQt => {
@@ -99,25 +100,34 @@ pub fn handle_char(mut main_collection: Vec<Token>, mut current_token: Option<To
                         });
                     return Ok((main_collection, current_token))
                 }
+            },
+            TokenType::StringComment => {
+                current_token = concat_value(current_token, current_chr);
+                return Ok((main_collection, current_token))
             }, 
             _ => {
-                if punct::is_punct(current_chr.clone()) {
+                if (
+                    current_type.clone() == TokenType::SignPeriod ||
+                    current_type.clone() == TokenType::SignUnderScore
+                ){
+                    let current_punct = current_type.clone().to_string();
+                    current_token = Some(
+                        Token {
+                            id: TokenType::Char,
+                            value: Some(vec![current_punct])
+                        });
+                    current_token = concat_value(current_token, current_chr);
+                    return Ok((main_collection, current_token))
+                } else {
                     (main_collection, _) = push_to_main(main_collection, current_token);
                     current_token = Some(
                         Token {
                             id: punct::match_punct(current_chr.clone()),
                             value: None
                         });
+
                     return Ok((main_collection, current_token))
-                } else {
-                    (main_collection, _) = push_to_main(main_collection, current_token);
-                    current_token = Some(
-                        Token {
-                            id: TokenType::Char,
-                            value: Some(vec![current_chr.to_string()])
-                        });
-                    return Ok((main_collection, current_token))
-                } 
+                }
             }
         }
     }

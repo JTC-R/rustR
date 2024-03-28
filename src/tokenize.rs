@@ -1,6 +1,7 @@
 #[allow(unused_parens)]
+#[allow(non_snake_case)]
 use std::thread::current;
-
+use std::fmt;
 //pub mod tokenize {
 use crate::space;
 use crate::chars;
@@ -32,10 +33,11 @@ pub enum TokenType {
     Char,
     Num,
 
-    StringSngSt,
+    StringSnglSt,
     StringSnglQt,
     StringDblSt,
     StringDblQt,
+    StringComment,
 
     SignEq,
     SignMinus,
@@ -49,6 +51,19 @@ pub enum TokenType {
     SignAt,
     SignBracketRight,
     SignBracketLeft,
+    SignExclam,
+    SignHash,
+    SignDol,
+    SignHat,
+    SignAmp,
+    SignAskt,
+    SignSqBracketLeft,
+    SignSqBracketRight,
+    SignPipe,
+    SignTilda,
+    SignColon,
+    SignPlus,
+    SignBackTick,
 
     SlashForward,
     SlashBackward,
@@ -66,6 +81,47 @@ pub enum TokenType {
     SpIn,
     SpUnk,
 }
+
+impl fmt::Display for TokenType {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> std::fmt::Result {
+        match self {
+//            TokenType::Start            => write!(formatter, "Start"),
+//            TokenType::End              => write!(formatter, "End"),
+//            TokenType::Space            => write!(formatter, "Space"),
+//            TokenType::Char             => write!(formatter, "Char"),
+//            TokenType::Num              => write!(formatter, "Num"),
+//            TokenType::StringSnglSt     => write!(formatter, "String
+            TokenType::SignGt           => write!(formatter, "{}", '>'),
+            TokenType::SignLt           => write!(formatter, "{}", '<'),
+            TokenType::SignPrcnt        => write!(formatter, "{}", '%'),
+            TokenType::SignModulo       => write!(formatter, "{}", "%%"),
+            TokenType::SignPeriod       => write!(formatter, "{}", '.'),
+            TokenType::SignComma        => write!(formatter, "{}", ','),
+            TokenType::SignUnderScore   => write!(formatter, "{}", '_'),
+            TokenType::SignAt           => write!(formatter, "{}", '@'),
+            TokenType::SignBracketRight => write!(formatter, "{}", ']'),
+            TokenType::SignBracketLeft  => write!(formatter, "{}", '['),
+            TokenType::SignExclam       => write!(formatter, "{}", '!'),
+            TokenType::SignHash         => write!(formatter, "{}", '#'),
+            TokenType::SignDol          => write!(formatter, "{}", '$'),
+            TokenType::SignHat          => write!(formatter, "{}", '^'),
+            TokenType::SignAmp          => write!(formatter, "{}", '&'),
+            TokenType::SignAskt         => write!(formatter, "{}", '*'),
+            TokenType::SignSqBracketLeft=> write!(formatter, "{}", '['),
+            TokenType::SignSqBracketRight=>write!(formatter, "{}", ']'),
+            TokenType::SignPipe         => write!(formatter, "{}", '|'),
+            TokenType::SignTilda        => write!(formatter, "{}", '~'),
+            TokenType::SignColon        => write!(formatter, "{}", ':'),
+            TokenType::SignPlus         => write!(formatter, "{}", '+'),
+            TokenType::SignBackTick     => write!(formatter, "{}", '`'),
+            
+            _ => write!(formatter, "Unknown type") 
+            
+            
+        }
+    }
+}
+
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct Token {
@@ -102,7 +158,7 @@ pub fn push_to_main(main_collection: Vec<Token>, current_token: Option<Token>) -
 
 }
 
-pub fn start_string_single(current_chr: char) -> Option<Token> {
+pub fn start_string_sngl(current_chr: char) -> Option<Token> {
     return Some(
         Token {
             id: TokenType::StringSnglQt,
@@ -111,7 +167,7 @@ pub fn start_string_single(current_chr: char) -> Option<Token> {
     )
 }
 
-pub fn start_dbl_string(current_chr: char) -> Option<Token> {
+pub fn start_string_dbl(current_chr: char) -> Option<Token> {
     return Some (
         Token {
             id: TokenType::StringDblQt,
@@ -122,7 +178,7 @@ pub fn start_dbl_string(current_chr: char) -> Option<Token> {
 
 pub fn concat_value(current_token: Option<Token>, current_chr: char) -> Option<Token> {
     let current_id: TokenType = current_token.clone().unwrap().id;
-    let mut current_value = current_token.clone().unwrap().value.unwrap();
+    let mut current_value = current_token.clone().unwrap().value.unwrap(); 
     current_value.push(current_chr.to_string());
     let current_string = current_value.concat();
 

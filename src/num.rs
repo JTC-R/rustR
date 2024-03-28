@@ -1,6 +1,8 @@
 #[allow(unused_parens)]
+#[allow(non_snake_case)]
+
 use std::thread::current;
-use crate::tokenize:: {Token, TokenType, start_string_single, start_dbl_string, concat_value, push_to_main};
+use crate::tokenize:: {Token, TokenType, start_string_sngl, start_string_dbl, concat_value, push_to_main};
 use crate::tokenize::{TokeError, TokeErrType};
 use crate::punct;
 use crate::log::{LogType, TokenizeStage, TokenizeAction, Log};
@@ -33,8 +35,8 @@ pub fn handle_num(mut main_collection: Vec<Token>, mut current_token: Option<Tok
         }
         
         match current_type {
-            TokenType::StringSngSt => {
-                current_token = start_string_single(current_chr);
+            TokenType::StringSnglSt => {
+                current_token = start_string_sngl(current_chr);
                 return Ok((main_collection, current_token))
             },
             TokenType::StringSnglQt => {
@@ -42,7 +44,7 @@ pub fn handle_num(mut main_collection: Vec<Token>, mut current_token: Option<Tok
                 return Ok((main_collection, current_token))
             },
             TokenType::StringDblSt => {
-                current_token = start_dbl_string(current_chr);
+                current_token = start_string_dbl(current_chr);
                 return Ok((main_collection, current_token))
             },
             TokenType::StringDblQt => {

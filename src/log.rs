@@ -1,4 +1,5 @@
 #[allow(unused_parens)]
+#[allow(non_snake_case)]
 use std::{fs, io, fmt};
 use std::io::Write;
 use std::path::Path;
@@ -33,6 +34,8 @@ pub enum TokenizeStage {
     Start,
     Space,
     Punct,
+    PunctStringSngl,
+    PunctStringDbl,
     Char,
     Num,
     End,
@@ -137,7 +140,7 @@ impl Log {
 
         if file_list_.is_ok() {
 
-            let mut file_list = std::fs::read_dir(Path::new(".").join("logs")).unwrap()
+            let file_list = std::fs::read_dir(Path::new(".").join("logs")).unwrap()
                 .map(|res| res.map(|e| e.path()))
                 .collect::<Result<Vec<_>, io::Error>>()
                 .unwrap();
@@ -167,8 +170,6 @@ impl Log {
             let _ = log_file.write(log_text.as_bytes()); 
 
         } else {
-            // panic!("Unable to write to log file");
-            println!("hellllloooo");
             let p = Path::new(".").join("logs");
             println!("{:?}", p);
         }
