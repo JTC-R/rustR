@@ -9,7 +9,7 @@ use crate::log::{ Log, LogType, TokenizeStage, TokenizeAction };
 pub fn init() {
     let mut dir_create: bool = false;
 
-    let dir_path = Path::new(".").join("logs");
+    let dir_path = Path::new("./..").join("target").join("logs");
     if !dir_path.exists() {
         DirBuilder::new()
             .create(&dir_path)

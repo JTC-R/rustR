@@ -136,17 +136,17 @@ impl Log {
     }
 
     pub fn write(&self) {
-        let file_list_ = std::fs::read_dir(Path::new(".").join("logs"));
+        let file_list_ = std::fs::read_dir(Path::new("./..").join("target").join("logs"));
 
         if file_list_.is_ok() {
 
-            let file_list = std::fs::read_dir(Path::new(".").join("logs")).unwrap()
+            let file_list = std::fs::read_dir(Path::new("./..").join("target").join("logs")).unwrap()
                 .map(|res| res.map(|e| e.path()))
                 .collect::<Result<Vec<_>, io::Error>>()
                 .unwrap();
 
             let filename_log = file_list.last().unwrap();
-
+            println!("{:?}", filename_log);
             let date_time = chrono::Utc::now().format("%Y/%m/%d %H:%M:%S"); 
 
             let log_type = self.ltype;
