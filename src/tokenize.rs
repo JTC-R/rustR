@@ -1,13 +1,16 @@
 #[allow(unused_parens)]
 #[allow(non_snake_case)]
-use std::thread::current;
+
+
 use std::fmt;
-//pub mod tokenize {
+use std::path::Path;
+use std::io::Write;
+
 use crate::space;
 use crate::chars;
 use crate::num;
 use crate::punct;
-use crate::log::{ Log, LogType, TokenizeStage, TokenizeAction };
+use crate::log::{ Log, TokenizeStage, get_log_name };
 
 
 
@@ -146,6 +149,25 @@ impl Token {
         }
     }
 
+    pub fn record_token_in_log(self) {
+        let file_path = Path::new("./..")
+            .join("target")
+            .join("logs");
+        let file_list = std::fs::read_dir(file_path);
+            match file_list {
+                Ok(_) => {
+                    let filename_log = get_log_name();
+                    let mut log_file = std::fs::OpenOptions::new()
+                        .write(true)
+                        .append(true)
+                        .open(filename_log)
+                        .expect("Cannot append to log file");
+                    let token_text = format!("{:?}\n", self);
+                    let _ = log_file.write(token_text.as_bytes());
+                },
+                Err(_) => println!("Error")
+            }
+    }
 }
 
 
@@ -254,8 +276,6 @@ pub fn tokenize(code: &str) -> Result<Vec<Token>, TokeError> {
                 }
             }
         }
-        //if current_indx == code_length {
-        //}
     }
 
         if current_token.clone().is_some() {

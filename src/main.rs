@@ -37,21 +37,25 @@ fn main() {
         .read(true)
         .open(&file_location)
         .expect("Cannot locate given file");
-    
+
     let mut input_code = String::new();
     file_con.read_to_string(&mut input_code)
         .expect("Cannot read file");
 
     println!("{:?}", input_code);
 
-    let token = tokenize::tokenize(&input_code).unwrap();
+
+    let tokens = tokenize::tokenize(&input_code).unwrap();
         
     println!("Input code: {:?}\n", input_code);
-    println!("{:?}\n", token);
+    //println!("{:?}\n", tokens);
 
-    for tok in token {
-        println!("{:?}\n", tok);
+    for token in tokens.into_iter() {
+//        println!("Placing token in log\n");
+//        println!("{:?}", tok.clone());
+        token.record_token_in_log(); 
     }
+
 
 }
 

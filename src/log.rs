@@ -1,6 +1,7 @@
 #[allow(unused_parens)]
 #[allow(non_snake_case)]
-use std::{fs, io, fmt};
+use std::fmt;
+use std::ffi::OsString;
 use std::io::Write;
 use std::path::Path;
 // What do I want for the logging? 
@@ -138,43 +139,69 @@ impl Log {
     }
 
     pub fn write(&self) {
-        let file_list_ = std::fs::read_dir(Path::new("./..").join("target").join("logs"));
+//        let file_list = std::fs::read_dir(Path::new("./..")
+//                                          .join("target")
+//                                          .join("logs"));
+//
+//        match file_list {
+//            Ok(flcon) => {
+//                let file_count = flcon.count();
+//                let log_number = file_count;
+//                let filename = format!("tok_{0}.log", &log_number);
+//                let filename_log = Path::new("./..")
+//                    .join("target")
+//                    .join("logs")
+//                    .join(filename);
+        let filename_log = get_log_name();
+        let log_type = self.ltype;
+        let log_stage = self.stage;
+        let log_event = self.event;
+    
+        let date_time = chrono::Utc::now().format("%Y/%m/%d %H:%M:%S"); 
+        let log_text = format!(
+            "{0} :: Type: {1} :: Stage: {2} :: Event: {3} ||\n",
+            date_time,
+            log_type.unwrap_or(LogType::None),
+            log_stage.unwrap_or(TokenizeStage::None),
+            log_event.unwrap_or(TokenizeAction::None));
 
-        if file_list_.is_ok() {
+        let mut log_file = std::fs::OpenOptions::new()
+            .write(true)
+            .append(true)
+            .open(filename_log)
+            .expect("Unable to append log file");
 
-            let file_list = std::fs::read_dir(Path::new("./..").join("target").join("logs")).unwrap()
-                .map(|res| res.map(|e| e.path()))
-                .collect::<Result<Vec<_>, io::Error>>()
-                .unwrap();
+        let _ = log_file.write(log_text.as_bytes()); 
+            
 
-            let filename_log = file_list.last().unwrap();
-            println!("{:?}", filename_log);
-            let date_time = chrono::Utc::now().format("%Y/%m/%d %H:%M:%S"); 
-
-            let log_type = self.ltype;
-            let log_stage = self.stage;
-            let log_event = self.event;
-        
-            let log_text = format!(
-                "{0} :: Type: {1} :: Stage: {2} :: Event: {3} ||\n",
-                date_time,
-                log_type.unwrap_or(LogType::None),
-                log_stage.unwrap_or(TokenizeStage::None),
-                log_event.unwrap_or(TokenizeAction::None),
-            );
-
-            let mut log_file = std::fs::OpenOptions::new()
-                .write(true)
-                .append(true)
-                .open(filename_log)
-                .expect("Unable to append log file");
-
-            let _ = log_file.write(log_text.as_bytes()); 
-
-        } else {
-            let p = Path::new(".").join("logs");
-            println!("{:?}", p);
-        }
-    }   
+//  }, 
+//    Err(_) => { 
+//        println!("Error!")
+//    }
+    }
+   // }
 }
- 
+
+pub fn get_log_name() -> OsString {
+    let file_path = Path::new("./..")
+        .join("target")
+        .join("logs");
+
+    let file_list = std::fs::read_dir(file_path);
+
+    match file_list {
+        Ok(flcon) => {
+            let file_count = flcon.count();
+            let log_number = file_count;
+            let filename = format!("tok_{0}.log", log_number);
+            let filename_log = Path::new("./..")
+                .join("target")
+                .join("logs")
+                .join(filename);
+            return filename_log.into_os_string()
+        }, 
+        Err(_) => {
+            panic!("Unable to locate log file name");
+        }
+    }
+}

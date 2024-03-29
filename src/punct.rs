@@ -37,7 +37,7 @@ pub fn is_punct(current_chr: char) -> bool {
         current_chr == ']'  ||
         current_chr == '|'  ||
         current_chr == '~'  ||
-        current_chr == ':'  ||
+        current_chr == ':'  || 
         current_chr == '+'  ||
         current_chr == '`'  
     ) {
