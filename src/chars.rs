@@ -1,10 +1,9 @@
-
 #[allow(non_snake_case)]
 #[allow(unused_parens)]
+
 use crate::tokenize::{Token, TokenType, start_string_sngl, start_string_dbl, concat_value, push_to_main};
 use crate::tokenize::{TokeError, TokeErrType};
-use crate::punct;
-use crate::log::{ Log, LogType, TokenizeStage, TokenizeAction };
+use crate::log::{ Log, TokenizeStage };
 
 pub fn is_char(current_chr: char) -> bool {
     if current_chr.is_alphabetic() {
@@ -27,18 +26,7 @@ pub fn handle_char(mut main_collection: Vec<Token>, mut current_token: Option<To
     } else {
 
         let current_type: TokenType = current_token.clone().unwrap().id;
-        let current_value_test: Option<Vec<String>> = current_token.clone().unwrap().value;
-        let mut current_value: Option<Vec<String>> = Some(vec![String::new()]);
-
-        match current_value_test {
-            Some(s) => {
-                current_value = Some(vec![s.concat()])
-            }, 
-            None => {
-                current_value = None
-            }
-        }
-
+        
         match current_type {
             TokenType::StringSnglSt => {
                 current_token = start_string_sngl(current_chr);

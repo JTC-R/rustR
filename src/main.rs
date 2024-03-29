@@ -2,7 +2,7 @@
 #[allow(non_snake_case)]
 
 use std::env;
-use std::fs::{File, OpenOptions};
+use std::fs::OpenOptions;
 use std::io::Read;
 
 pub mod tokenize;
@@ -10,7 +10,6 @@ pub mod space;
 pub mod chars;
 pub mod num;
 pub mod punct;
-pub mod errorHandler;
 pub mod log;
 pub mod init;
 
@@ -53,13 +52,11 @@ fn main() {
 #[cfg(test)]
 mod test {
     #[allow(unused_parens)]
+    #[allow(non_snake_case)]
+    #[allow(non_camel_case_types)]
     use super::*;
-    use crate::tokenize::tokenize;
     use crate::tokenize::{Token, TokenType};
-    use crate::tokenize::{TokeError, TokeErrType};
-    use crate::init;
-    use crate::log::*;
-
+    
     #[test]
     fn unit_char() {
         let tokens = tokenize::tokenize("abc");
@@ -711,13 +708,13 @@ mod test {
                 id: TokenType::StringSnglQt,
                 value: Some(vec!['a'.to_string()])
             });
-      assert_eq!(
+        assert_eq!(
           tokens[24],
           Token {
               id: TokenType::SignEq,
               value: None
           });
-      assert_eq!(
+        assert_eq!(
           tokens[25],
           Token {
               id: TokenType::Char,

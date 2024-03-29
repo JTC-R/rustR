@@ -4,9 +4,7 @@ use std::fmt;
 use std::ffi::OsString;
 use std::io::Write;
 use std::path::Path;
-// What do I want for the logging? 
-//
-// - want to know location
+
 #[derive(Debug, Clone, Copy)]
 pub enum LogType {
     Critical,
@@ -81,10 +79,7 @@ pub enum TokenizeAction {
     NumUnexpected,
 
     None
-
- 
 }
-
 
 impl fmt::Display for TokenizeAction {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> std::fmt::Result {
@@ -109,7 +104,6 @@ impl fmt::Display for TokenizeAction {
     }
 }
 
-
 #[derive(Debug, Clone, Copy)]
 pub struct Log {
     pub ltype: Option<LogType>,
@@ -124,7 +118,6 @@ impl Log {
             stage: stage,
             event: event,
         };
-        
         return log_location
     }
 
@@ -134,24 +127,10 @@ impl Log {
            stage: Some(location),
            event: None,
        };
-       println!("Logging: {:?}", log_location.clone());
        return  log_location
     }
 
     pub fn write(&self) {
-//        let file_list = std::fs::read_dir(Path::new("./..")
-//                                          .join("target")
-//                                          .join("logs"));
-//
-//        match file_list {
-//            Ok(flcon) => {
-//                let file_count = flcon.count();
-//                let log_number = file_count;
-//                let filename = format!("tok_{0}.log", &log_number);
-//                let filename_log = Path::new("./..")
-//                    .join("target")
-//                    .join("logs")
-//                    .join(filename);
         let filename_log = get_log_name();
         let log_type = self.ltype;
         let log_stage = self.stage;
@@ -171,15 +150,8 @@ impl Log {
             .open(filename_log)
             .expect("Unable to append log file");
 
-        let _ = log_file.write(log_text.as_bytes()); 
-            
-
-//  }, 
-//    Err(_) => { 
-//        println!("Error!")
-//    }
+        let _ = log_file.write(log_text.as_bytes());   
     }
-   // }
 }
 
 pub fn get_log_name() -> OsString {
@@ -191,13 +163,13 @@ pub fn get_log_name() -> OsString {
 
     match file_list {
         Ok(flcon) => {
-            let file_count = flcon.count();
-            let log_number = file_count;
+            let log_number = flcon.count();
             let filename = format!("tok_{0}.log", log_number);
             let filename_log = Path::new("./..")
                 .join("target")
                 .join("logs")
                 .join(filename);
+
             return filename_log.into_os_string()
         }, 
         Err(_) => {

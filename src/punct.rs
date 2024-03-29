@@ -1,12 +1,9 @@
 #[allow(unused_parens)]
 #[allow(non_snake_case)]
 
-use std::thread::current;
 use crate::tokenize::{Token, TokenType, start_string_sngl, start_string_dbl, concat_value, push_to_main};
 use crate::tokenize::{TokeError, TokeErrType};
 use crate::log::{ Log, LogType, TokenizeStage, TokenizeAction };
-
-
 
 pub fn is_punct(current_chr: char) -> bool {
     if (
@@ -118,10 +115,11 @@ pub fn match_punct(current_chr: char) -> TokenType {
         return TokenType::SignUnk
     }
 }
-// The current character is a punctuation
+
 pub fn handle_punct(mut main_collection: Vec<Token>, mut current_token: Option<Token>, current_chr: char) -> Result<(Vec<Token>, Option<Token>), TokeError> {
 
     Log::location(TokenizeStage::Punct).write();
+
     if current_token.clone().is_none() {
         if current_chr == '#' {
             current_token = Some( Token {
@@ -136,10 +134,9 @@ pub fn handle_punct(mut main_collection: Vec<Token>, mut current_token: Option<T
                 });
         }
         return Ok((main_collection, current_token))
+
     } else {
-        
         let current_id: TokenType = current_token.clone().unwrap().id;
-    
         match current_id {
             TokenType::StringSnglSt => {
                 current_token = start_string_sngl(current_chr);
@@ -301,7 +298,6 @@ pub fn handle_punct(mut main_collection: Vec<Token>, mut current_token: Option<T
             TokenType::StringComment => {
                 current_token = concat_value(current_token, current_chr);
                 return Ok((main_collection, current_token))
-                // String comment needs to have the values concatted not pushed
             },
             TokenType::SignPeriod => {
                 if current_chr == '.' {
@@ -347,11 +343,3 @@ pub fn handle_punct(mut main_collection: Vec<Token>, mut current_token: Option<T
         }
     }
 }
-
-
-
-
-
-
-
-

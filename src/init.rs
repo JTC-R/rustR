@@ -1,5 +1,6 @@
 #[allow(non_snake_case)]
 #[allow(unused_parens)]
+#[allow(unused_assignments)]
 use std::fs::{ File, DirBuilder };
 use std::io::Write;
 use std::path::Path;

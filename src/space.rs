@@ -1,9 +1,9 @@
 #[allow(unused_parens)]
 #[allow(non_snake_case)]
-use std::thread::current;
-use crate::tokenize:: {Token, TokenType, start_string_sngl, start_string_dbl, push_to_main, concat_value};
-use crate::tokenize:: {TokeError, TokeErrType};
-use crate::log::{ Log, LogType, TokenizeStage, TokenizeAction };
+
+use crate::tokenize::{Token, TokenType, start_string_sngl, start_string_dbl, push_to_main, concat_value};
+use crate::tokenize::TokeError;
+use crate::log::{ Log, TokenizeStage };
 
 pub fn is_space(current_chr: char) -> bool {
     if (
@@ -17,6 +17,7 @@ pub fn is_space(current_chr: char) -> bool {
 }
 
 pub fn handle_space(mut main_collection: Vec<Token>, mut current_token: Option<Token>, current_chr: char) -> Result<(Vec<Token>, Option<Token>), TokeError> {
+    
     Log::location(TokenizeStage::Space).write();
     
     if current_token.clone().is_none() {
@@ -32,7 +33,6 @@ pub fn handle_space(mut main_collection: Vec<Token>, mut current_token: Option<T
                 return Ok((main_collection, current_token))
             }
         } else {
-
             match current_type {
                 TokenType::StringSnglSt => {
                     current_token = start_string_sngl(current_chr);

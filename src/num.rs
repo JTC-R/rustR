@@ -1,11 +1,11 @@
 #[allow(unused_parens)]
 #[allow(non_snake_case)]
 
-use std::thread::current;
 use crate::tokenize:: {Token, TokenType, start_string_sngl, start_string_dbl, concat_value, push_to_main};
-use crate::tokenize::{TokeError, TokeErrType};
-use crate::punct;
-use crate::log::{LogType, TokenizeStage, TokenizeAction, Log};
+use crate::tokenize::TokeError;
+use crate::log::{TokenizeStage, Log};
+
+
 pub fn is_num(current_chr: char) -> bool {
     if current_chr.is_numeric() {
         return true 
@@ -25,15 +25,6 @@ pub fn handle_num(mut main_collection: Vec<Token>, mut current_token: Option<Tok
         return Ok((main_collection, current_token))
     } else {
         let current_type: TokenType = current_token.clone().unwrap().id;
-        let current_value_test: Option<Vec<String>> = current_token.clone().unwrap().value;
-        let mut current_value_unwrapped = Vec::new();
-
-        if current_value_test.is_some() {
-            current_value_unwrapped = current_token.clone().unwrap().value.unwrap();
-            current_value_unwrapped.push(current_chr.to_string());
-            current_value_unwrapped = vec![current_value_unwrapped.concat()];
-        }
-        
         match current_type {
             TokenType::StringSnglSt => {
                 current_token = start_string_sngl(current_chr);
@@ -59,7 +50,7 @@ pub fn handle_num(mut main_collection: Vec<Token>, mut current_token: Option<Tok
                 current_token = Some( 
                     Token {
                         id: TokenType::Num,
-                        value: Some(current_value_unwrapped)
+                        value: Some(vec![current_chr.to_string()])
                     }
                 );
                 return Ok((main_collection, current_token))
@@ -76,7 +67,6 @@ pub fn handle_num(mut main_collection: Vec<Token>, mut current_token: Option<Tok
                         value: Some(vec![current_chr.to_string()])
                     });
                 return Ok((main_collection, current_token))
- //               }
             }
         }
     }

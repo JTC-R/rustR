@@ -1,7 +1,6 @@
 #[allow(unused_parens)]
 #[allow(non_snake_case)]
 
-
 use std::fmt;
 use std::path::Path;
 use std::io::Write;
@@ -12,8 +11,6 @@ use crate::num;
 use crate::punct;
 use crate::log::{ Log, TokenizeStage, get_log_name };
 
-
-
 #[derive(Debug)]
 pub enum TokeErrType {
     UnexpectedChar,
@@ -22,6 +19,7 @@ pub enum TokeErrType {
     UnexpectedSpecialCharInturrupt,
     UnexpectedSpecialSignInturrupt,
 }
+
 #[derive(Debug)]
 pub struct TokeError {
     pub id: TokeErrType
@@ -128,7 +126,6 @@ impl fmt::Display for TokenType {
     }
 }
 
-
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct Token {
     pub id: TokenType, 
@@ -136,6 +133,7 @@ pub struct Token {
 }
 
 impl Token {
+
     pub fn start() -> Self {
         return 
             Token {
@@ -157,19 +155,19 @@ impl Token {
             .join("target")
             .join("logs");
         let file_list = std::fs::read_dir(file_path);
-            match file_list {
-                Ok(_) => {
-                    let filename_log = get_log_name();
-                    let mut log_file = std::fs::OpenOptions::new()
-                        .write(true)
-                        .append(true)
-                        .open(filename_log)
-                        .expect("Cannot append to log file");
-                    let token_text = format!("{:?}\n", self);
-                    let _ = log_file.write(token_text.as_bytes());
-                },
-                Err(_) => println!("Error")
-            }
+        match file_list {
+            Ok(_) => {
+                let filename_log = get_log_name();
+                let mut log_file = std::fs::OpenOptions::new()
+                    .write(true)
+                    .append(true)
+                    .open(filename_log)
+                    .expect("Cannot append to log file");
+                let token_text = format!("{:?}\n", self);
+                let _ = log_file.write(token_text.as_bytes());
+            },
+            Err(_) => println!("Error")
+        }
     }
 }
 
@@ -180,7 +178,6 @@ pub fn push_to_main(main_collection: Vec<Token>, current_token: Option<Token>) -
     let current_token_new: Option<Token> = None;
 
     return (main_collection_new, current_token_new)
-
 }
 
 pub fn start_string_sngl(current_chr: char) -> Option<Token> {
@@ -222,13 +219,10 @@ pub fn tokenize(code: &str) -> Result<Vec<Token>, TokeError> {
     let mut main_collection = vec![Token::start()];
     let mut current_token: Option<Token> = None;
     let code_buffer = code;
-    let code_length = code_buffer.len() - 1;
 
     for current_buffer in code_buffer.chars().enumerate(){
         let current_indx = current_buffer.0;
         let current_chr = current_buffer.1;
-        println!("Current indx: {:?}", current_indx);
-        println!("Current chr: {:?}", current_chr);
 
         if space::is_space(current_chr.clone()) {
             println!("Is space");
@@ -280,13 +274,9 @@ pub fn tokenize(code: &str) -> Result<Vec<Token>, TokeError> {
             }
         }
     }
-
-        if current_token.clone().is_some() {
-            (main_collection, _) = push_to_main(main_collection.clone(), current_token.clone());
-        }
-        (main_collection, _) = push_to_main(
-            main_collection.clone(),
-            Some(Token::end()));
-        
+    if current_token.clone().is_some() {
+        (main_collection, _) = push_to_main(main_collection.clone(), current_token.clone());
+    }
+    (main_collection, _) = push_to_main(main_collection, Some(Token::end()));
     Ok(main_collection)
 }
