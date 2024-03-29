@@ -50,6 +50,7 @@ pub enum TokenType {
     SignModulo,
     SignPeriod,
     SignComma,
+    SignElips,
     SignUnderScore,
     SignAt,
     SignBracketRight,
@@ -79,6 +80,7 @@ pub enum TokenType {
     AssignRight,
     AssignLeft,
     
+    PipeR,
     PipeDplyr,
 
     SpIn,
@@ -88,16 +90,9 @@ pub enum TokenType {
 impl fmt::Display for TokenType {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> std::fmt::Result {
         match self {
-//            TokenType::Start            => write!(formatter, "Start"),
-//            TokenType::End              => write!(formatter, "End"),
-//            TokenType::Space            => write!(formatter, "Space"),
-//            TokenType::Char             => write!(formatter, "Char"),
-//            TokenType::Num              => write!(formatter, "Num"),
-//            TokenType::StringSnglSt     => write!(formatter, "String
             TokenType::SignGt           => write!(formatter, "{}", '>'),
             TokenType::SignLt           => write!(formatter, "{}", '<'),
             TokenType::SignPrcnt        => write!(formatter, "{}", '%'),
-            TokenType::SignModulo       => write!(formatter, "{}", "%%"),
             TokenType::SignPeriod       => write!(formatter, "{}", '.'),
             TokenType::SignComma        => write!(formatter, "{}", ','),
             TokenType::SignUnderScore   => write!(formatter, "{}", '_'),
@@ -117,10 +112,18 @@ impl fmt::Display for TokenType {
             TokenType::SignColon        => write!(formatter, "{}", ':'),
             TokenType::SignPlus         => write!(formatter, "{}", '+'),
             TokenType::SignBackTick     => write!(formatter, "{}", '`'),
-            
+            TokenType::SlashForward     => write!(formatter, "{}", "/"),
+            TokenType::ParensLeft       => write!(formatter, "{}", "("),
+            TokenType::ParensRight      => write!(formatter, "{}", ")"),
+            TokenType::SlashBackward    => write!(formatter, "{}", "\\"),
+            TokenType::PipeR            => write!(formatter, "{}", "|>"),
+            TokenType::SignModulo       => write!(formatter, "{}", "%%"),
+            TokenType::AssignRight      => write!(formatter, "{}", "->"),
+            TokenType::AssignLeft       => write!(formatter, "{}", "<-"),
+            TokenType::PipeDplyr        => write!(formatter, "{}", "%>%"),
+            TokenType::SignElips        => write!(formatter, "{}", "..."),
+            TokenType::SpIn             => write!(formatter, "{}", "%in%"),
             _ => write!(formatter, "Unknown type") 
-            
-            
         }
     }
 }

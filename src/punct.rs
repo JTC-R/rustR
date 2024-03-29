@@ -177,7 +177,26 @@ pub fn handle_punct(mut main_collection: Vec<Token>, mut current_token: Option<T
                         value: Some(vec![String::new()])
                     });
                 return Ok((main_collection, current_token))
-            }
+            },
+            TokenType::SignPipe => {
+                if current_chr == '>' {
+                    current_token = Some(
+                        Token {
+                            id: TokenType::PipeR,
+                            value: None
+                        });
+                    (main_collection, current_token) = push_to_main(main_collection, current_token);
+                    return Ok((main_collection, current_token))
+                } else {
+                    (main_collection, _) = push_to_main(main_collection, current_token);
+                    current_token = Some( 
+                        Token {
+                            id: match_punct(current_chr.clone()),
+                            value: None
+                        });
+                    return Ok((main_collection, current_token))
+                }
+            }, 
             TokenType::SignMinus => {
                 if current_chr == '>' {
                     current_token = Some (
@@ -272,6 +291,43 @@ pub fn handle_punct(mut main_collection: Vec<Token>, mut current_token: Option<T
                 } else { 
                     (main_collection, _) = push_to_main(main_collection, current_token);
                     current_token = Some(
+                        Token {
+                            id: match_punct(current_chr.clone()),
+                            value: None
+                        });
+                    return Ok((main_collection, current_token))
+                }
+            },
+            TokenType::StringComment => {
+                current_token = concat_value(current_token, current_chr);
+                return Ok((main_collection, current_token))
+                // String comment needs to have the values concatted not pushed
+            },
+            TokenType::SignPeriod => {
+                if current_chr == '.' {
+                    current_token = Some( 
+                        Token {
+                            id: TokenType::SignElips,
+                            value: None
+                        });
+                    return Ok((main_collection, current_token))
+                } else {
+                    (main_collection, _) = push_to_main(main_collection, current_token);
+                    current_token = Some( 
+                        Token {
+                            id: match_punct(current_chr.clone()),
+                            value: None
+                        });
+                    return Ok((main_collection, current_token))
+                }
+            },
+            TokenType::SignElips => {
+                if current_chr == '.' {
+                    (main_collection, current_token) = push_to_main(main_collection, current_token);
+                    return Ok((main_collection, current_token))
+                } else {
+                    (main_collection, _) = push_to_main(main_collection, current_token);
+                    current_token = Some( 
                         Token {
                             id: match_punct(current_chr.clone()),
                             value: None

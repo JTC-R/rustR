@@ -50,7 +50,11 @@ pub fn handle_num(mut main_collection: Vec<Token>, mut current_token: Option<Tok
             TokenType::StringDblQt => {
                 current_token = concat_value(current_token, current_chr);
                 return Ok((main_collection, current_token))
-            }
+            },
+            TokenType::StringComment => {
+                current_token = concat_value(current_token, current_chr);
+                return Ok((main_collection, current_token))
+            },
             TokenType::Num => {
                 current_token = Some( 
                     Token {

@@ -8,7 +8,7 @@ use crate::log::{ Log, LogType, TokenizeStage, TokenizeAction };
 pub fn is_space(current_chr: char) -> bool {
     if (
         current_chr.clone().to_string() == ' '.to_owned().to_string() ||
-        current_chr.clone().to_string() == "\\n".to_string()
+        current_chr.clone().to_string() == "\n".to_string()
     ){
         return true
     } else {
@@ -24,7 +24,7 @@ pub fn handle_space(mut main_collection: Vec<Token>, mut current_token: Option<T
     } else {
         let current_type: TokenType = current_token.clone().unwrap().id;
         if current_type == TokenType::StringComment {
-            if current_chr.to_string() == "\\n".to_string() {
+            if current_chr.to_string() == "\n".to_string() {
                 (main_collection, current_token) = push_to_main(main_collection, current_token);
                 return Ok((main_collection, current_token))
             } else {
