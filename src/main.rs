@@ -14,8 +14,8 @@ pub mod init;
 fn main() {
     init::init();
     let input_code = "
-            print(\"hello world!\")
-            # but not really :(";
+            test@example -> fa2
+        ";
     let token = tokenize::tokenize(input_code).unwrap();
         
     println!("Input code: {:?}\n", input_code);

@@ -122,10 +122,9 @@ pub fn handle_char(mut main_collection: Vec<Token>, mut current_token: Option<To
                     (main_collection, _) = push_to_main(main_collection, current_token);
                     current_token = Some(
                         Token {
-                            id: punct::match_punct(current_chr.clone()),
-                            value: None
+                            id: TokenType::Char,
+                            value: Some(vec![current_chr.to_string()])
                         });
-
                     return Ok((main_collection, current_token))
                 }
             }
