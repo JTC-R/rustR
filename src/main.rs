@@ -1,6 +1,10 @@
 #[allow(unused_parens)]
 #[allow(non_snake_case)]
 
+use std::env;
+use std::fs::{File, OpenOptions};
+use std::io::Read;
+
 pub mod tokenize;
 pub mod space;
 pub mod chars;
@@ -10,13 +14,37 @@ pub mod errorHandler;
 pub mod log;
 pub mod init;
 
+use crate::log::*;
 
 fn main() {
     init::init();
-    let input_code = "
-            test@example -> fa2
-        ";
-    let token = tokenize::tokenize(input_code).unwrap();
+    
+    let mut file_location = &String::new();
+    let args: Vec<String> = env::args().collect();
+    
+    if args.len() <= 1 {
+       panic!("No file path supplied");
+    } else {
+        file_location = &args[1];
+        Log::record(
+            Some(LogType::Notify),
+            Some(TokenizeStage::Init),
+            Some(TokenizeAction::InitArgsSupplied)
+        );
+    }
+
+    let mut file_con = OpenOptions::new()
+        .read(true)
+        .open(&file_location)
+        .expect("Cannot locate given file");
+    
+    let mut input_code = String::new();
+    file_con.read_to_string(&mut input_code)
+        .expect("Cannot read file");
+
+    println!("{:?}", input_code);
+
+    let token = tokenize::tokenize(&input_code).unwrap();
         
     println!("Input code: {:?}\n", input_code);
     println!("{:?}\n", token);

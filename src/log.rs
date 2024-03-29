@@ -62,6 +62,7 @@ impl fmt::Display for TokenizeStage {
 pub enum TokenizeAction {
     Init,
     InitLogDirCreation,
+    InitArgsSupplied,
 
     MainPush,
 
@@ -99,6 +100,7 @@ impl fmt::Display for TokenizeAction {
             TokenizeAction::CharUnexpected      => write!(formatter,"Unexpected Character encounter"),
             TokenizeAction::NumUnexpected       => write!(formatter,"Unexpected num encounter"),
             TokenizeAction::InitLogDirCreation  => write!(formatter, "Log Directory creation"),
+            TokenizeAction::InitArgsSupplied    => write!(formatter, "Arguments supply"),
             TokenizeAction::None                => write!(formatter, "None"),
             _ => write!(formatter,"Unknown TokenizeAction")
 
